@@ -22,3 +22,12 @@ API function Description
 Get the loan schedule get the schedule for a loan this user owns
 Make a repayment make a payment for any loan
 Forgive(cancel) a repayment Forgive a payment for any loan
+
+
+
+Admin login credentials: username: admin@bg password: admin
+User login credentials: username: user@bg password: password
+
+API Documentation http://localhost:8080/swagger-ui.html
+
+DB credentials: http://localhost:8080/h2-console username: admin password: admin
