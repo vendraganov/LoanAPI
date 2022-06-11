@@ -1,6 +1,8 @@
 package com.example.loan_api.models.loan;
 
 
+import com.example.loan_api.models.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,4 +49,10 @@ public class LoanPayment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = FK_LOAN)
     private Loan loan;
+
+    @JsonIgnore
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = FK_USER)
+    private User user;
 }

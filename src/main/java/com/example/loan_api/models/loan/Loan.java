@@ -1,6 +1,5 @@
 package com.example.loan_api.models.loan;
 
-import com.example.loan_api.models.auth.Account;
 import com.example.loan_api.models.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
