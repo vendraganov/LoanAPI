@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,11 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private static final String DB_ENDPOINT = "/h2-console/**";
-    private static final String LOGIN_ENDPOINT = "/user/login";
+    private static final String LOGIN_ENDPOINT = "/login";
     private static final String[] SWAGGER_ENDPOINTS = {
             "/v2/api-docs",
             "/swagger-resources/**",
@@ -59,6 +57,7 @@ public class SecurityConfig {
                 .antMatchers(SWAGGER_ENDPOINTS).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
         return http.build();
     }
 }

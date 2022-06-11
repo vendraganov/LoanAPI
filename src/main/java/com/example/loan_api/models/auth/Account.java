@@ -1,6 +1,8 @@
 package com.example.loan_api.models.auth;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -21,7 +23,9 @@ import static com.example.loan_api.helpers.Constants.*;
 public class Account implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = UUID)
+    @GenericGenerator(name = UUID, strategy = UUID_GENERATOR)
+    @Type(type = UUID_TYPE)
     @Column(name = ID)
     private UUID id;
 

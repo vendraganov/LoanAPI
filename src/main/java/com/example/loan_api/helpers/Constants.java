@@ -2,6 +2,10 @@ package com.example.loan_api.helpers;
 
 public class Constants {
 
+    public static final String UUID = "UUID";
+    public static final String UUID_GENERATOR = "org.hibernate.id.UUIDGenerator";
+    public static final String UUID_TYPE = "org.hibernate.type.UUIDCharType";
+
     public static final String ID = "id";
     public static final String FK_USER = "fk_user";
     public static final String FK_ACCOUNT = "fk_account";
@@ -27,5 +31,6 @@ public class Constants {
     public static final String USED_ON = "used_on";
     public static final String DOMAIN = "domain";
     public static final String LOAN = "loan";
+    public static final String LOGIN_ON = "login_on";
     public static final String DEFAULT_FALSE = "boolean default false";
 }
