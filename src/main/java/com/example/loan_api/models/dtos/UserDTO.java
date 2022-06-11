@@ -1,4 +1,4 @@
-package com.example.loan_api.controllers.dtos;
+package com.example.loan_api.models.dtos;
 
 import lombok.Builder;
 

@@ -1,4 +1,4 @@
-package com.example.loan_api.models;
+package com.example.loan_api.models.auth;
 
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,26 +8,22 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-import static com.example.loan_api.helpers.Constants.AUTHORITY_ID;
+import static com.example.loan_api.helpers.Constants.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users")
-public class User implements UserDetails {
-
-    private static final String USER_ID = "user_id";
-    private static final String EMAIL = "email";
-    private static final String PASSWORD = "password";
-    private static final String ENABLED = "enabled";
+@Table(name="accounts")
+public class Account implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = USER_ID)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = ID)
+    private UUID id;
 
     @NotNull
     @Email
@@ -40,7 +36,7 @@ public class User implements UserDetails {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = AUTHORITY_ID)
+    @JoinColumn(name = FK_AUTHORITY)
     private Authority authority;
 
     @Override

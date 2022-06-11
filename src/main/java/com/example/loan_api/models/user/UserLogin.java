@@ -1,4 +1,4 @@
-package com.example.loan_api.models;
+package com.example.loan_api.models.user;
 
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Login {
+public class UserLogin {
 
     @NotNull
     @Email

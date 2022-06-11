@@ -1,8 +1,8 @@
 package com.example.loan_api.services;
 
-import com.example.loan_api.controllers.dtos.UserDTO;
-import com.example.loan_api.models.User;
-import com.example.loan_api.repositories.UserRepository;
+import com.example.loan_api.models.dtos.UserDTO;
+import com.example.loan_api.models.auth.Account;
+import com.example.loan_api.repositories.AccountRepository;
 import com.example.loan_api.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +16,13 @@ public class UserService implements UserDetailsService {
 
     private static final String NOT_FOUND = "User with email %s not found!";
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
 
     public UserDTO login(String email){
-        User user = this.findByEmail(email);
+        Account account = this.findByEmail(email);
         return UserDTO.builder()
-                .token(jwtTokenUtil.generateToken(user))
+                .token(jwtTokenUtil.generateToken(account))
                 .build();
     }
 
@@ -31,8 +31,8 @@ public class UserService implements UserDetailsService {
         return this.findByEmail(email);
     }
 
-    private User findByEmail(String email) {
-        return this.userRepository.findByEmail(email)
+    private Account findByEmail(String email) {
+        return this.accountRepository.findByEmail(email)
                 .orElseThrow(()-> new UsernameNotFoundException(String.format(NOT_FOUND, email)));
     }
 }

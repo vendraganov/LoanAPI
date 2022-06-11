@@ -1,4 +1,4 @@
-package com.example.loan_api.models;
+package com.example.loan_api.models.auth;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -6,7 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import static com.example.loan_api.helpers.Constants.AUTHORITY_ID;
+import java.util.UUID;
+
+import static com.example.loan_api.helpers.Constants.*;
+
 
 @Getter
 @Setter
@@ -16,19 +19,18 @@ import static com.example.loan_api.helpers.Constants.AUTHORITY_ID;
 @Table(name = "authorities")
 public class Authority implements GrantedAuthority {
 
-    private static final String ROLE = "role";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = AUTHORITY_ID)
-    private Long authorityId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = ID)
+    private UUID id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = ROLE)
-    private String role;
+    private Role role;
 
     @Override
     public String getAuthority() {
-        return role;
+        return role.name();
     }
 }

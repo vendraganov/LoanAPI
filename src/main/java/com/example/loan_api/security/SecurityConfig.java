@@ -23,9 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private static final String ROLE_ADMIN = "ADMIN";
-    private static final String FILE_ENDPOINTS = "/file/**";
-    private static final String STUDENT_ENDPOINTS = "/student/**";
     private static final String DB_ENDPOINT = "/h2-console/**";
     private static final String LOGIN_ENDPOINT = "/user/login";
     private static final String[] SWAGGER_ENDPOINTS = {
@@ -60,8 +57,6 @@ public class SecurityConfig {
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(DB_ENDPOINT).permitAll()
                 .antMatchers(SWAGGER_ENDPOINTS).permitAll()
-                .antMatchers(STUDENT_ENDPOINTS).hasAnyAuthority(ROLE_ADMIN)
-                .antMatchers(FILE_ENDPOINTS).hasAnyAuthority(ROLE_ADMIN)
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

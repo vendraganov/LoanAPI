@@ -1,8 +1,8 @@
 package com.example.loan_api.controllers;
 
 
-import com.example.loan_api.controllers.dtos.UserDTO;
-import com.example.loan_api.models.Login;
+import com.example.loan_api.models.dtos.UserDTO;
+import com.example.loan_api.models.user.UserLogin;
 import com.example.loan_api.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,18 +36,18 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping()
-    public UserDTO login(@Valid @RequestBody Login login) {
+    public UserDTO login(@Valid @RequestBody UserLogin userLogin) {
         LOGGER.info(LOGGING_REQUEST);
         try {
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            login.getEmail(),
-                            login.getPassword()
+                            userLogin.getEmail(),
+                            userLogin.getPassword()
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOGGER.info(LOGIN_USER + login.getEmail());
-            return this.userService.login(login.getEmail());
+            LOGGER.info(LOGIN_USER + userLogin.getEmail());
+            return this.userService.login(userLogin.getEmail());
         } catch (AuthenticationException ex) {
             LOGGER.error(ERROR_LOGIN + ex.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());

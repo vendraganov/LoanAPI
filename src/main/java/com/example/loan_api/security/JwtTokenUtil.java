@@ -1,6 +1,6 @@
 package com.example.loan_api.security;
 
-import com.example.loan_api.models.User;
+import com.example.loan_api.models.auth.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,8 +21,8 @@ public class JwtTokenUtil {
         return getAllClaimsFromToken(token).getSubject();
     }
 
-    public String generateToken(User user) {
-        return doGenerateToken(user.getEmail(), user.getAuthority().getRole());
+    public String generateToken(Account account) {
+        return doGenerateToken(account.getEmail(), account.getAuthority().getRole().name());
     }
 
     boolean validateToken(String token, UserDetails userDetails) {
@@ -39,7 +39,6 @@ public class JwtTokenUtil {
     private String doGenerateToken(String subject, String authority) {
         Claims claims = Jwts.claims().setSubject(subject);
         claims.put(SCOPES, Collections.singletonList(authority));
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
