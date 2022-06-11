@@ -5,13 +5,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
 
-@Component
-public class JwtTokenUtil {
+@Service
+public class JwtTokenService {
 
     private static final long ACCESS_TOKEN_VALIDITY_SECONDS = 1000*60*30;
     private static final String SCOPES = "scopes";

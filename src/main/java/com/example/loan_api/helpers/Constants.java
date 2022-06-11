@@ -33,4 +33,12 @@ public class Constants {
     public static final String LOAN = "loan";
     public static final String LOGIN_ON = "login_on";
     public static final String DEFAULT_FALSE = "boolean default false";
+
+    public static final String DATA = "data";
+    public static final String ERROR = "error";
+    public static final String ERRORS = "errors";
+    public static final String MESSAGE = "message";
+    public static final String STATUS = "status";
+    public static final String CODE = "code";
+    public static final String GLOBAL = "global";
 }

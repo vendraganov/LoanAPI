@@ -2,6 +2,9 @@ package com.example.loan_api.models.dtos;
 
 import lombok.*;
 
+import java.util.UUID;
+
+@ToString
 @Getter
 @Setter
 @Builder
@@ -9,5 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UserDTO {
 
+    private UUID id;
+    private String name;
     private String token;
 }
