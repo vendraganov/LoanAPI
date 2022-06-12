@@ -1,19 +1,19 @@
 package com.example.loan_api.models.dto;
 
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostPaymentDTO extends AbstractPaymentDTO {
+public class PostPaymentDTO {
 
     @NotNull
-    private Double amount;
+    private UUID userId;
 
-    @Nullable
-    private Double fine;
+    @NotNull
+    private UUID loanId;
 }

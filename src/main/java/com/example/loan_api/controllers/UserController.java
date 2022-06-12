@@ -1,12 +1,13 @@
 package com.example.loan_api.controllers;
 
 import com.example.loan_api.models.anotation.AuthorizeAll;
-import com.example.loan_api.models.response.SuccessfulResponse;
+import com.example.loan_api.controllers.response.SuccessfulResponse;
 import com.example.loan_api.models.user.UserLogin;
 import com.example.loan_api.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,6 +48,6 @@ public class UserController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LOGGER.info(LOGIN_USER + userLogin.getEmail());
-        return SuccessfulResponse.getResponse(USER, this.userService.login(userLogin.getEmail()));
+        return SuccessfulResponse.getResponse(HttpStatus.OK, USER, this.userService.login(userLogin.getEmail()));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.loan_api.models.loan;
 
+import com.example.loan_api.helpers.Constants;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;

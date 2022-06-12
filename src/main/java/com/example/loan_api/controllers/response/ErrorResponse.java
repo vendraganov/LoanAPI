@@ -1,4 +1,4 @@
-package com.example.loan_api.models.response;
+package com.example.loan_api.controllers.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

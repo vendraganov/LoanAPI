@@ -1,12 +1,10 @@
 package com.example.loan_api.models.loan;
 
 
+import com.example.loan_api.helpers.Constants;
 import com.example.loan_api.models.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -17,6 +15,7 @@ import java.util.UUID;
 
 import static com.example.loan_api.helpers.Constants.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,17 +32,21 @@ public class LoanPayment {
     private UUID id;
 
     @NotNull
-    @Column(name = AMOUNT)
-    private Double amount;
+    @Column(name = PRINCIPAL, scale = 2)
+    private Double principal;
+
+    @NotNull
+    @Column(name = INTEREST, scale = 2)
+    private Double interest;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = TYPE)
-    private LoanPaymentType type;
+    @Column(name = Constants.STATUS)
+    private LoanPaymentStatus status;
 
     @NotNull
-    @Column(name = PAYED_ON)
-    private LocalDateTime payedOn;
+    @Column(name = PAID_ON)
+    private LocalDateTime paidOn;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

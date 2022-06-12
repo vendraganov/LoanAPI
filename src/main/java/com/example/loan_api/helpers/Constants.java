@@ -19,14 +19,16 @@ public class Constants {
     public static final String NAME = "name";
     public static final String USER = "user";
     public static final String MONTHS = "months";
+    public static final String STATUS = "status";
     public static final String TYPE = "type";
     public static final String AMOUNT = "amount";
     public static final String APPLIED_ON = "applied_on";
-    public static final String PAYED_ON = "payed_on";
-    public static final String FINED_ON = "fined_on";
-    public static final String PAYED_OFF_ON = "payed_off_on";
-    public static final String PAYMENT_WAIVED = "payment_waived";
+    public static final String APPROVED_ON = "approved_on";
+    public static final String PAID_ON = "paid_on";
+    public static final String PAID_OFF_ON = "paid_off_on";
+    public static final String WAIVED_PAYMENT = "waived_payment";
     public static final String INTEREST = "interest";
+    public static final String PRINCIPAL = "principal";
     public static final String IDEMPOTENT_KEY = "idempotent_key";
     public static final String USED_ON = "used_on";
     public static final String DOMAIN = "domain";
@@ -36,12 +38,12 @@ public class Constants {
     public static final String DEFAULT_FALSE = "boolean default false";
     public static final String LOAN_TYPES = "loan_types";
     public static final String LOAN_SCHEDULE = "loan_schedule";
+    public static final String MONTHLY_PAYMENT_AMOUNT = "monthly_payment_amount";
 
     public static final String DATA = "data";
     public static final String ERROR = "error";
     public static final String ERRORS = "errors";
     public static final String MESSAGE = "message";
-    public static final String STATUS = "status";
     public static final String CODE = "code";
     public static final String GLOBAL = "global";
 }

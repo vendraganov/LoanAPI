@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostWaivePaymentDTO extends AbstractPaymentDTO {
+public class PostWaivePaymentDTO extends PostPaymentDTO {
 
     @NotNull
     private Boolean waivePayment;

@@ -33,24 +33,28 @@ public class Loan {
     private UUID id;
 
     @NotNull
-    @Column(name = PAYMENT_WAIVED, columnDefinition = DEFAULT_FALSE)
-    private Boolean paymentWaived;
+    @Column(name = MONTHLY_PAYMENT_AMOUNT)
+    private Double monthlyPaymentAmount;
+
+    @NotNull
+    @Column(name = WAIVED_PAYMENT, columnDefinition = DEFAULT_FALSE)
+    private Boolean waivedPayment;
 
     @NotNull
     @Column(name = APPLIED_ON)
     private LocalDateTime appliedOn;
 
+    @NotNull
+    @Column(name = APPROVED_ON)
+    private LocalDateTime approvedOn;
+
     @Nullable
-    @Column(name = PAYED_OFF_ON)
-    private LocalDateTime payedOffOn;
+    @Column(name = PAID_OFF_ON)
+    private LocalDateTime paidOffOn;
 
     @Nullable
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = LOAN)
     private List<LoanPayment> loanPayments;
-
-    @Nullable
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = LOAN)
-    private List<LoanFine> loanFines;
 
     @NotNull
     @OneToOne
