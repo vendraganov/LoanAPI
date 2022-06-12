@@ -1,6 +1,4 @@
-package com.example.loan_api.models.auth;
-
-import org.springframework.security.access.prepost.PreAuthorize;
+package com.example.loan_api.idempotency;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize(Role.ADMIN_AUTHORITY)
-public @interface AuthorizeAdmin {
+public @interface CheckIdempotentKey {
 }

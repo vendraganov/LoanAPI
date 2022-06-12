@@ -1,5 +1,6 @@
-package com.example.loan_api.models.auth;
+package com.example.loan_api.models.anotation;
 
+import com.example.loan_api.models.auth.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;

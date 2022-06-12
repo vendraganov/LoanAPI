@@ -27,12 +27,15 @@ public class Constants {
     public static final String PAYED_OFF_ON = "payed_off_on";
     public static final String PAYMENT_WAIVED = "payment_waived";
     public static final String INTEREST = "interest";
-    public static final String REQUEST_KEY = "request_key";
+    public static final String IDEMPOTENT_KEY = "idempotent_key";
     public static final String USED_ON = "used_on";
     public static final String DOMAIN = "domain";
     public static final String LOAN = "loan";
+    public static final String LOANS = "loans";
     public static final String LOGIN_ON = "login_on";
     public static final String DEFAULT_FALSE = "boolean default false";
+    public static final String LOAN_TYPES = "loan_types";
+    public static final String LOAN_SCHEDULE = "loan_schedule";
 
     public static final String DATA = "data";
     public static final String ERROR = "error";

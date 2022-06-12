@@ -1,4 +1,4 @@
-package com.example.loan_api.models.responses;
+package com.example.loan_api.models.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,8 @@ public class ErrorResponse<T> extends ResponseEntity<T> {
         super(body, status);
     }
 
-    public static ErrorResponse<?> getResponse(HttpStatus status, Exception ex) {
-        return new ErrorResponse<>(getResponseMap(status, ex.getMessage()), status);
+    public static ErrorResponse<?> getResponse(HttpStatus status, String message) {
+        return new ErrorResponse<>(getResponseMap(status, message), status);
     }
 
     public static Map<String, Object> getResponseMap(HttpStatus status, String message) {

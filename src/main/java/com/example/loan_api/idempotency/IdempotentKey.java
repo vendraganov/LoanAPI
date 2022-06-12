@@ -1,9 +1,6 @@
-package com.example.loan_api.models.user;
+package com.example.loan_api.idempotency;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -14,13 +11,14 @@ import java.util.UUID;
 
 import static com.example.loan_api.helpers.Constants.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="idempotent_keys")
-public class UserRequestKey {
+public class IdempotentKey {
 
     @Id
     @GeneratedValue(generator = UUID)
@@ -30,12 +28,13 @@ public class UserRequestKey {
     private UUID id;
 
     @NotNull
-    @Column(name = REQUEST_KEY)
-    private UUID requestKey;
+    @Type(type = UUID_TYPE)
+    @Column(name = IDEMPOTENT_KEY, unique = true)
+    private UUID idempotentKey;
 
     @NotNull
     @Column(name = DOMAIN)
-    private UUID domain;
+    private String domain;
 
     @NotNull
     @Column(name = USED_ON)

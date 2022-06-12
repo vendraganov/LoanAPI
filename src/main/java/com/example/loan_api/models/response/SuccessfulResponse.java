@@ -1,4 +1,4 @@
-package com.example.loan_api.models.responses;
+package com.example.loan_api.models.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,19 @@ public class SuccessfulResponse<T> extends ResponseEntity<T> {
         super(body, status);
     }
 
+    public static SuccessfulResponse<?> getResponse() {
+        Map<String, Object> objectMap = new LinkedHashMap<>();
+        return getMapSuccessfulResponse(objectMap);
+    }
+
     public static <T> SuccessfulResponse<?> getResponse(String responseName, T responseObj) {
-        Map<String, Object> responseMap = new LinkedHashMap<>();
         Map<String, Object> objectMap = new LinkedHashMap<>();
         objectMap.put(responseName, responseObj);
+        return getMapSuccessfulResponse(objectMap);
+    }
+
+    private static SuccessfulResponse<?> getMapSuccessfulResponse(Map<String, Object> objectMap) {
+        Map<String, Object> responseMap = new LinkedHashMap<>();
         responseMap.put(DATA, objectMap);
         responseMap.put(CODE, HttpStatus.OK.value());
         responseMap.put(STATUS, HttpStatus.OK);

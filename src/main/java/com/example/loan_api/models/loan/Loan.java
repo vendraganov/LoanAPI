@@ -1,10 +1,7 @@
 package com.example.loan_api.models.loan;
 
 import com.example.loan_api.models.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
@@ -19,6 +16,7 @@ import java.util.UUID;
 
 import static com.example.loan_api.helpers.Constants.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

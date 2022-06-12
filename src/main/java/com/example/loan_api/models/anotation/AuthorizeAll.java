@@ -1,4 +1,4 @@
-package com.example.loan_api.models.auth;
+package com.example.loan_api.models.anotation;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize(Role.USER_AUTHORITY)
-public @interface AuthorizeUser {
+@PreAuthorize("permitAll()")
+public @interface AuthorizeAll {
 }

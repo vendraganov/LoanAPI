@@ -1,6 +1,6 @@
 package com.example.loan_api.security;
 
-import com.example.loan_api.models.responses.ErrorResponse;
+import com.example.loan_api.models.response.ErrorResponse;
 import com.example.loan_api.services.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -1,15 +1,11 @@
-package com.example.loan_api.models.dtos;
+package com.example.loan_api.models.dto;
 
 import lombok.*;
 
 import java.util.UUID;
 
-@ToString
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class UserDTO {
 
     private UUID id;

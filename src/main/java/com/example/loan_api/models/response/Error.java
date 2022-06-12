@@ -1,4 +1,4 @@
-package com.example.loan_api.models.responses;
+package com.example.loan_api.models.response;
 
 import lombok.*;
 

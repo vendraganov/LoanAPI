@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,18 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private static final String DB_ENDPOINT = "/h2-console/**";
-    private static final String LOGIN_ENDPOINT = "/v1/login";
-    private static final String[] SWAGGER_ENDPOINTS = {
-            "/v2/api-docs",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**"
-    };
+    private static final String ENDPOINT_LOGIN = "/api/v1/users/login";
+    private static final String ENDPOINT_DB = "/h2-console/**";
+    private static final String ENDPOINT_SWAGGER = "/swagger-ui.html";
 
-    private final UserDetailsService userDetailsService;
     private final AuthEntryPoint authEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -54,9 +45,7 @@ public class SecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT).permitAll()
-                .antMatchers(DB_ENDPOINT).permitAll()
-                .antMatchers(SWAGGER_ENDPOINTS).permitAll()
+                .antMatchers(ENDPOINT_LOGIN, ENDPOINT_DB, ENDPOINT_SWAGGER).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().disable();
