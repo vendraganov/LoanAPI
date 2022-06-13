@@ -1,6 +1,6 @@
 package com.example.loan_api.security;
 
-import com.example.loan_api.exceptions.AuthEntryPoint;
+import com.example.loan_api.exception.AuthEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package com.example.loan_api.security;
 
-import com.example.loan_api.models.auth.Account;
+import com.example.loan_api.model.auth.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,23 +13,26 @@ import java.util.Date;
 @Service
 public class JwtTokenService {
 
+    /**
+     * Token is set to 30 minutes
+    */
     private static final long ACCESS_TOKEN_VALIDITY_SECONDS = 1000*60*30;
 
-    private static final String SCOPES = "scopes";
     private static final String SIGNING_KEY = "loan-v1";
+    private static final String SCOPES = "scopes";
 
     public String getEmailFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
     public String generateToken(Account account) {
-        return doGenerateToken(account.getEmail(), account.getAuthority().getRole().name());
+        return doGenerateToken(account.getEmail(), account.getAuthority().getRole());
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String email = getEmailFromToken(token);
         return (email.equals(userDetails.getUsername())
-                && !this.isTokenExpired(token));
+                && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

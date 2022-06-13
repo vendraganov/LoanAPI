@@ -1,7 +1,7 @@
 package com.example.loan_api.idempotency;
 
-import com.example.loan_api.exceptions.custom.IdempotentKeyExistException;
-import com.example.loan_api.repositories.IdempotentKeyRepository;
+import com.example.loan_api.exception.custom.IdempotentKeyExistException;
+import com.example.loan_api.repository.IdempotentKeyRepository;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,11 +17,6 @@ import java.util.UUID;
 @Component
 public class CheckIdempotentKeyAspect {
 
-    private static final String IDEMPOTENT_KEY_HEADER = "idempotent-key";
-    private static final String IDEMPOTENT_KEY_EXIST = "Idempotent key exist!";
-    private static final String INVALID_UUID_SIGNATURE = "Invalid UUID signature!";
-    private static final String IDEMPOTENT_KEY_NOT_PRESENTED = "Idempotent key not presented in header!";
-
     private final IdempotentKeyRepository idempotentKeyRepository;
 
     @Around("@annotation(CheckIdempotentKey)")
@@ -33,25 +28,26 @@ public class CheckIdempotentKeyAspect {
             if (obj instanceof HttpServletRequest) {
                 uri = ((HttpServletRequest) obj).getRequestURI();
                 try {
-                    idempotentKey = UUID.fromString(((HttpServletRequest) obj).getHeader(IDEMPOTENT_KEY_HEADER));
+                    idempotentKey = UUID.fromString(((HttpServletRequest) obj).getHeader("idempotent-key"));
                 } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException(INVALID_UUID_SIGNATURE);
+                    throw new IllegalArgumentException("Invalid UUID signature!");
                 }
             }
         }
         if (idempotentKey != null) {
-            if (this.idempotentKeyRepository.existsById(idempotentKey)) {
-                throw new IdempotentKeyExistException(IDEMPOTENT_KEY_EXIST);
+            if (this.idempotentKeyRepository.existsByIdempotentKeyAndStatus(idempotentKey, IdempotentKeyStatus.USED)) {
+                throw new IdempotentKeyExistException("Idempotent key exist!");
             }
             this.idempotentKeyRepository.save(IdempotentKey
                     .builder()
                     .idempotentKey(idempotentKey)
                     .domain(uri)
+                    .status(IdempotentKeyStatus.IN_USE)
                     .usedOn(LocalDateTime.now())
                     .build());
             return joinPoint.proceed();
         } else {
-            throw new IllegalArgumentException(IDEMPOTENT_KEY_NOT_PRESENTED);
+            throw new IllegalArgumentException("Idempotent key not presented in header!");
         }
     }
 }
