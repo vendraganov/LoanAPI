@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,8 +34,8 @@ public class Loan {
     private UUID id;
 
     @NotNull
-    @Column(name = MONTHLY_PAYMENT_AMOUNT)
-    private Double monthlyPaymentAmount;
+    @Column(name = MONTHLY_PAYMENT_AMOUNT, scale = 2)
+    private BigDecimal monthlyPaymentAmount;
 
     @NotNull
     @Column(name = WAIVED_PAYMENT, columnDefinition = DEFAULT_FALSE)

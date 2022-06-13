@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static com.example.loan_api.helpers.Constants.*;
@@ -34,10 +35,10 @@ public class LoanType {
     private Integer months;
 
     @NotNull
-    @Column(name = AMOUNT)
-    private Double amount;
+    @Column(name = AMOUNT, scale = 2)
+    private BigDecimal amount;
 
     @NotNull
-    @Column(name = INTEREST)
-    private Double interest;
+    @Column(name = INTEREST, scale = 2)
+    private BigDecimal interest;
 }

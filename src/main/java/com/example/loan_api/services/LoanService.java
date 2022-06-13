@@ -55,6 +55,7 @@ public class LoanService {
                         .name(user.getName())
                         .loanId(loan.getId())
                         .loanType(loan.getLoanType())
+                        .paymentStatus(loan.getPaidOffOn() == null ? LoanPaymentStatus.UNPAID.name() : LoanPaymentStatus.PAID.name())
                         .build()).collect(Collectors.toList());
     }
 
@@ -67,24 +68,24 @@ public class LoanService {
         List<LoanPayment> loanPayments = loan.getLoanPayments();
         List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
 
-        double principalAmountPaid = 0;
-        double totalInterestPaid = 0;
+        BigDecimal principalAmountPaid = BigDecimal.ZERO;
+        BigDecimal totalInterestPaid = BigDecimal.ZERO;
         int payments = loanPayments == null ? 0 : loanPayments.size();
 
         for (int i = 0; i < loan.getLoanType().getMonths(); i++) {
             String paymentStatus = i < payments ? loanPayments.get(i).getStatus().name() : LoanPaymentStatus.UNPAID.name();
-            double interest =  i < payments ? this.calculateMonthlyInterest(loan) :
+            BigDecimal interest =  i < payments ? this.calculateMonthlyInterest(loan) :
                     this.calculateMonthlyInterest(loan.getLoanType().getAmount(), principalAmountPaid, loan.getLoanType().getInterest());
-            double principal = round(loan.getMonthlyPaymentAmount() - interest);
-            principalAmountPaid += principal;
-            totalInterestPaid += interest;
+            BigDecimal principal = loan.getMonthlyPaymentAmount().subtract(interest);
+            principalAmountPaid = principalAmountPaid.add(principal);
+            totalInterestPaid = totalInterestPaid.add(interest);
             ScheduleDTO scheduleDTO = ScheduleDTO.builder()
                     .paymentDate(loan.getApprovedOn().plusMonths(i+1).format(formatter))
-                    .monthlyPayment(round(loan.getMonthlyPaymentAmount()))
-                    .principal(principal)
-                    .interest(interest)
-                    .totalInterestPaid(round(totalInterestPaid))
-                    .remainingBalance(round(loan.getLoanType().getAmount()-principalAmountPaid))
+                    .monthlyPayment(round(loan.getMonthlyPaymentAmount()).toString())
+                    .principal(round(principal).toString())
+                    .interest(round(interest).toString())
+                    .totalInterestPaid(round(totalInterestPaid).toString())
+                    .remainingBalance(round(loan.getLoanType().getAmount().subtract(principalAmountPaid)).toString())
                     .paymentStatus(paymentStatus)
                     .build();
             scheduleDTOS.add(scheduleDTO);
@@ -99,7 +100,7 @@ public class LoanService {
         if (this.isUserAppliedForThisLoanType(user, loanType)) {
             throw new IllegalArgumentException(LOAN_EXIST);
         }
-        Double monthlyPaymentAmount = this.calculateMonthlyPaymentAmount(loanType.getAmount(), loanType.getMonths(), loanType.getInterest());
+        BigDecimal monthlyPaymentAmount = this.calculateMonthlyPaymentAmount(loanType.getAmount(), loanType.getMonths(), loanType.getInterest());
         Loan loan = Loan.builder()
                 .monthlyPaymentAmount(monthlyPaymentAmount)
                 .waivedPayment(false)
@@ -128,8 +129,8 @@ public class LoanService {
     }
 
     private LoanPayment savePayment(User user, Loan loan, LoanPaymentStatus loanPaymentStatus) {
-        double interest = this.calculateMonthlyInterest(loan);
-        double principal = round(loan.getMonthlyPaymentAmount() - interest);
+        BigDecimal interest = this.calculateMonthlyInterest(loan);
+        BigDecimal principal = loan.getMonthlyPaymentAmount().subtract(interest);
         LoanPayment loanPayment = LoanPayment.builder()
                 .principal(principal)
                 .interest(interest)
@@ -167,6 +168,7 @@ public class LoanService {
     private boolean isUserAppliedForThisLoanType(User user, LoanType loanType) {
         return user.getLoans() != null && user.getLoans()
                 .stream()
+                .filter(loan -> loan.getPaidOffOn() == null)
                 .flatMap(loan -> Stream.of(loan.getLoanType()))
                 .anyMatch(loanType1 -> loanType1.getId().equals(loanType.getId()));
     }
@@ -183,23 +185,29 @@ public class LoanService {
         }
     }
 
-    private double calculateMonthlyPaymentAmount(double amount, int months, double interestIn) {
-        double interest = (interestIn/100)/12;
-        return amount*(Math.pow((1+interest), months)*interest)/((Math.pow((1+interest), months))-1);
+    private BigDecimal calculateMonthlyPaymentAmount(BigDecimal amount, Integer months, BigDecimal interestIn) {
+        BigDecimal interest = this.getBigDecimalInterest(interestIn);
+        BigDecimal pow = interest.add(BigDecimal.ONE).pow(months);
+        return amount.multiply(interest.multiply(pow))
+                .divide(pow.subtract(BigDecimal.ONE), 12, RoundingMode.HALF_UP);
     }
 
-    private double calculateMonthlyInterest(Loan loan) {
-        double totalAmount = loan.getLoanType().getAmount();
-        double principalAmountPaid =  loan.getLoanPayments() == null || loan.getLoanPayments().isEmpty() ? 0 :
-                loan.getLoanPayments().stream().mapToDouble(LoanPayment::getPrincipal).sum();
-        return round(this.calculateMonthlyInterest(totalAmount, principalAmountPaid, loan.getLoanType().getInterest()));
+    private BigDecimal calculateMonthlyInterest(Loan loan) {
+        BigDecimal totalAmount = loan.getLoanType().getAmount();
+        BigDecimal principalAmountPaid =  loan.getLoanPayments() == null || loan.getLoanPayments().isEmpty() ? BigDecimal.ZERO :
+                loan.getLoanPayments().stream().map(LoanPayment::getPrincipal).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        return this.calculateMonthlyInterest(totalAmount, principalAmountPaid, loan.getLoanType().getInterest());
     }
 
-    private double calculateMonthlyInterest(double totalAmount, double principalAmountPaid, double interest) {
-        return round((totalAmount-principalAmountPaid)*(interest/100/12));
+    private BigDecimal calculateMonthlyInterest(BigDecimal totalAmount, BigDecimal principalAmountPaid, BigDecimal interest) {
+        return (totalAmount.subtract(principalAmountPaid).multiply(this.getBigDecimalInterest(interest)));
     }
 
-    private Double round(Double value) {
-        return new BigDecimal(value.toString()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    private BigDecimal round(BigDecimal value) {
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal getBigDecimalInterest(BigDecimal interestIn) {
+        return interestIn.divide(BigDecimal.valueOf(100), 12, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(12), 12, RoundingMode.HALF_UP);
     }
 }

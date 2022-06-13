@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -33,11 +34,11 @@ public class LoanPayment {
 
     @NotNull
     @Column(name = PRINCIPAL, scale = 2)
-    private Double principal;
+    private BigDecimal principal;
 
     @NotNull
     @Column(name = INTEREST, scale = 2)
-    private Double interest;
+    private BigDecimal interest;
 
     @NotNull
     @Enumerated(EnumType.STRING)

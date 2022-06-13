@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class ScheduleDTO {
     private String paymentDate;
-    private Double monthlyPayment;
-    private Double principal;
-    private Double interest;
-    private Double totalInterestPaid;
-    private Double remainingBalance;
+    private String monthlyPayment;
+    private String principal;
+    private String interest;
+    private String totalInterestPaid;
+    private String remainingBalance;
     private String paymentStatus;
 }

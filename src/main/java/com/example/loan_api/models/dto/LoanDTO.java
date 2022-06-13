@@ -14,4 +14,5 @@ public class LoanDTO {
     private String name;
     private UUID loanId;
     private LoanType loanType;
+    private String paymentStatus;
 }
