@@ -25,11 +25,6 @@ public class IdempotentKey {
     @GenericGenerator(name = UUID, strategy = UUID_GENERATOR)
     @Type(type = UUID_TYPE)
     @Column(name = ID)
-    private UUID id;
-
-    @NotNull
-    @Type(type = UUID_TYPE)
-    @Column(name = IDEMPOTENT_KEY, unique = true)
     private UUID idempotentKey;
 
     @NotNull

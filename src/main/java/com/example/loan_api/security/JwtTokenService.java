@@ -14,8 +14,9 @@ import java.util.Date;
 public class JwtTokenService {
 
     private static final long ACCESS_TOKEN_VALIDITY_SECONDS = 1000*60*30;
+
     private static final String SCOPES = "scopes";
-    private static final String SIGNING_KEY = "tide";
+    private static final String SIGNING_KEY = "loan-v1";
 
     public String getEmailFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();
@@ -25,7 +26,7 @@ public class JwtTokenService {
         return doGenerateToken(account.getEmail(), account.getAuthority().getRole().name());
     }
 
-    boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String email = getEmailFromToken(token);
         return (email.equals(userDetails.getUsername())
                 && !this.isTokenExpired(token));

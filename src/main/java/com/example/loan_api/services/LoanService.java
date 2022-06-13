@@ -12,6 +12,8 @@ import com.example.loan_api.repositories.LoanRepository;
 import com.example.loan_api.repositories.LoanTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -44,7 +46,7 @@ public class LoanService {
     private final LoanPaymentRepository loanPaymentRepository;
     private final UserService userService;
 
-    public List<LoanDTO> getLoans(UUID userId) {
+    public List<LoanDTO> getAllByUserId(UUID userId) {
         User user = this.userService.findById(userId);
         return this.loanRepository.findAllByUserId(userId)
                 .stream()
@@ -64,13 +66,15 @@ public class LoanService {
         Loan loan = this.getLoan(loanId);
         List<LoanPayment> loanPayments = loan.getLoanPayments();
         List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+
         double principalAmountPaid = 0;
         double totalInterestPaid = 0;
         int payments = loanPayments == null ? 0 : loanPayments.size();
 
         for (int i = 0; i < loan.getLoanType().getMonths(); i++) {
             String paymentStatus = i < payments ? loanPayments.get(i).getStatus().name() : LoanPaymentStatus.UNPAID.name();
-            double interest =  i < payments ? this.calculateMonthlyInterest(loan) : this.calculateMonthlyInterest(loan.getLoanType().getAmount(), principalAmountPaid, loan.getLoanType().getInterest());
+            double interest =  i < payments ? this.calculateMonthlyInterest(loan) :
+                    this.calculateMonthlyInterest(loan.getLoanType().getAmount(), principalAmountPaid, loan.getLoanType().getInterest());
             double principal = round(loan.getMonthlyPaymentAmount() - interest);
             principalAmountPaid += principal;
             totalInterestPaid += interest;
@@ -88,10 +92,11 @@ public class LoanService {
         return scheduleDTOS;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void apply(PostLoanDTO postLoanDTO) {
         User user = this.userService.findById(postLoanDTO.getUserId());
         LoanType loanType = this.getLoanType(postLoanDTO.getLoanTypeId());
-        if (this.hasUserAppliedForThisLoanType(user, loanType)) {
+        if (this.isUserAppliedForThisLoanType(user, loanType)) {
             throw new IllegalArgumentException(LOAN_EXIST);
         }
         Double monthlyPaymentAmount = this.calculateMonthlyPaymentAmount(loanType.getAmount(), loanType.getMonths(), loanType.getInterest());
@@ -106,7 +111,7 @@ public class LoanService {
         this.loanRepository.save(loan);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     public void payment(PostPaymentDTO postPaymentDTO, boolean waivedPayment) {
         User user = this.userService.findById(postPaymentDTO.getUserId());
         Loan loan = this.getLoan(postPaymentDTO.getLoanId());
@@ -159,7 +164,7 @@ public class LoanService {
                 .orElseThrow(() -> new IllegalArgumentException(LOAN_NOT_FOUND));
     }
 
-    private boolean hasUserAppliedForThisLoanType(User user, LoanType loanType) {
+    private boolean isUserAppliedForThisLoanType(User user, LoanType loanType) {
         return user.getLoans() != null && user.getLoans()
                 .stream()
                 .flatMap(loan -> Stream.of(loan.getLoanType()))
@@ -178,9 +183,9 @@ public class LoanService {
         }
     }
 
-    private double calculateMonthlyPaymentAmount(double amount, int months, double interest) {
-        double i = ((interest/100)/12);
-        return amount*(Math.pow((1+i), months)*i)/((Math.pow((1+i), months))-1);
+    private double calculateMonthlyPaymentAmount(double amount, int months, double interestIn) {
+        double interest = (interestIn/100)/12;
+        return amount*(Math.pow((1+interest), months)*interest)/((Math.pow((1+interest), months))-1);
     }
 
     private double calculateMonthlyInterest(Loan loan) {

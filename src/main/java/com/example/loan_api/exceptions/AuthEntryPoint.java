@@ -1,5 +1,7 @@
 package com.example.loan_api.exceptions;
 
+import com.example.loan_api.controllers.response.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,10 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException {
         LOGGER.error(ex.getMessage());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(ErrorResponse.getResponseMap(HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase()));
+        response.getOutputStream().print(json);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 }

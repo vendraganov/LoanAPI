@@ -1,4 +1,4 @@
-package com.example.loan_api.models.anotation;
+package com.example.loan_api.models.auth.anotation;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

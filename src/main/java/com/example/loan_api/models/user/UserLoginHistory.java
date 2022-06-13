@@ -1,10 +1,6 @@
 package com.example.loan_api.models.user;
 
-import com.example.loan_api.helpers.Constants;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -15,6 +11,7 @@ import java.util.UUID;
 
 import static com.example.loan_api.helpers.Constants.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

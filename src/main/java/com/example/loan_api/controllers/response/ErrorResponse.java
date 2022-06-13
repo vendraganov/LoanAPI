@@ -19,18 +19,21 @@ public class ErrorResponse<T> extends ResponseEntity<T> {
     }
 
     public static Map<String, Object> getResponseMap(HttpStatus status, String message) {
-        Error error = Error.builder()
-                .domain(GLOBAL)
-                .message(message)
-                .reason(status.getReasonPhrase())
-                .build();
         Map<String, Object> responseMap = new LinkedHashMap<>();
-        Map<String, Object> objectMap = new LinkedHashMap<>();
-        objectMap.put(ERRORS, error);
-        responseMap.put(ERROR, objectMap);
+        responseMap.put(ERROR, createErrorMap(status, message));
         responseMap.put(CODE, status.value());
         responseMap.put(STATUS, status);
         responseMap.put(MESSAGE, status.series().name());
        return responseMap;
+    }
+
+    private static Map<String, Object> createErrorMap(HttpStatus status, String message) {
+        Map<String, Object> errorMapWrapper = new LinkedHashMap<>();
+        Map<String, Object> errorMap = new LinkedHashMap<>();
+        errorMap.put(DOMAIN, GLOBAL);
+        errorMap.put(MESSAGE, message);
+        errorMap.put(REASON, status.getReasonPhrase());
+        errorMapWrapper.put(ERRORS, errorMap);
+        return errorMapWrapper;
     }
 }

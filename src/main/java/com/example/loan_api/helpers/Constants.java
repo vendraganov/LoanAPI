@@ -46,4 +46,5 @@ public class Constants {
     public static final String MESSAGE = "message";
     public static final String CODE = "code";
     public static final String GLOBAL = "global";
+    public static final String REASON = "reason";
 }

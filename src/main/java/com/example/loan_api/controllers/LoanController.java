@@ -1,9 +1,9 @@
 package com.example.loan_api.controllers;
 
 
-import com.example.loan_api.models.anotation.AuthorizeAdmin;
-import com.example.loan_api.models.anotation.AuthorizeAdminAndUser;
-import com.example.loan_api.models.anotation.AuthorizeUser;
+import com.example.loan_api.models.auth.anotation.AuthorizeAdmin;
+import com.example.loan_api.models.auth.anotation.AuthorizeAdminAndUser;
+import com.example.loan_api.models.auth.anotation.AuthorizeUser;
 import com.example.loan_api.idempotency.CheckIdempotentKey;
 import com.example.loan_api.models.dto.PostLoanDTO;
 import com.example.loan_api.models.dto.PostPaymentDTO;
@@ -42,9 +42,9 @@ public class LoanController {
 
     @AuthorizeAdminAndUser
     @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessfulResponse<?> getLoans(@PathVariable UUID userId) {
+    public SuccessfulResponse<?> getAllByUserId(@PathVariable UUID userId) {
         LOGGER.info(GET_REQUEST_GET_LOANS);
-        return SuccessfulResponse.getResponse(HttpStatus.OK, LOANS, this.loanService.getLoans(userId));
+        return SuccessfulResponse.getResponse(HttpStatus.OK, LOANS, this.loanService.getAllByUserId(userId));
     }
 
     @AuthorizeUser

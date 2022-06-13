@@ -78,10 +78,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void jwtExceptionHandler(Exception ex, HttpServletResponse response) throws IOException {
         LOGGER.error(ex.getMessage());
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(ErrorResponse.getResponseMap(HttpStatus.UNAUTHORIZED, INVALID_TOKEN));
         response.getOutputStream().print(json);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 }

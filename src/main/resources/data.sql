@@ -5,7 +5,7 @@ INSERT INTO accounts (id, email, password, fk_authority) VALUES ('5dc370fd-ab2a-
 INSERT INTO users (id, name, fk_account) VALUES ('801b218f-20d4-4721-98c2-3b02f871af91', 'Zhorzh Raychev', 'cb4803b2-eaf1-463b-bdda-c4bf1c86c21e');
 INSERT INTO users (id, name, fk_account) VALUES ('34ddef44-4feb-4ed8-9c02-f6929ae82ebf', 'Ventsislav Draganov', '5dc370fd-ab2a-4153-950a-b6db87094ee0');
 
-INSERT INTO loan_types (id, type, months, amount, interest) VALUES ('14411b13-1e8e-4702-ad41-7341e97302b4', 'Personal Loan', 10, 5000, 6.0);
+INSERT INTO loan_types (id, type, months, amount, interest) VALUES ('14411b13-1e8e-4702-ad41-7341e97302b4', 'Personal Loan', 12, 5000, 6.0);
 INSERT INTO loan_types (id, type, months, amount, interest) VALUES ('54411b13-1e8e-4702-ad41-7341e97302b4', 'Personal Loan', 36, 10000, 7.5);
 INSERT INTO loan_types (id, type, months, amount, interest) VALUES ('2e01d2b8-308b-42af-a9d7-f04166df77a2', 'Personal Loan', 60, 20000, 6.5);
 INSERT INTO loan_types (id, type, months, amount, interest) VALUES ('89d5dae7-9f22-49e6-8353-f56901b4ebcb', 'Mortgage Loan', 120, 100000, 3.5);

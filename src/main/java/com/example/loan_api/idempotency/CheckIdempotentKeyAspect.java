@@ -40,7 +40,7 @@ public class CheckIdempotentKeyAspect {
             }
         }
         if (idempotentKey != null) {
-            if (this.idempotentKeyRepository.existsByIdempotentKey(idempotentKey)) {
+            if (this.idempotentKeyRepository.existsById(idempotentKey)) {
                 throw new IdempotentKeyExistException(IDEMPOTENT_KEY_EXIST);
             }
             this.idempotentKeyRepository.save(IdempotentKey
