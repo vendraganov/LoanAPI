@@ -1,6 +1,6 @@
 # LoanAPI
 
-API for requesting a loan and ability for making a schedule payments.
+API for requesting a loan and functionally to make schedule payments.
 
 Have 2 roles with a different set of APIs.
 
