@@ -13,6 +13,6 @@ public class LoanDTO {
     private UUID userId;
     private String name;
     private UUID loanId;
-    private LoanType loanType;
     private String paymentStatus;
+    private LoanType loanType;
 }

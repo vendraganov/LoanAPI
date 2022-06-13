@@ -74,7 +74,7 @@ public class LoanService {
 
         for (int i = 0; i < loan.getLoanType().getMonths(); i++) {
             String paymentStatus = i < payments ? loanPayments.get(i).getStatus().name() : LoanPaymentStatus.UNPAID.name();
-            BigDecimal interest =  i < payments ? this.calculateMonthlyInterest(loan) :
+            BigDecimal interest =  i < payments ? loanPayments.get(i).getInterest() :
                     this.calculateMonthlyInterest(loan.getLoanType().getAmount(), principalAmountPaid, loan.getLoanType().getInterest());
             BigDecimal principal = loan.getMonthlyPaymentAmount().subtract(interest);
             principalAmountPaid = principalAmountPaid.add(principal);
@@ -207,7 +207,7 @@ public class LoanService {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    private BigDecimal getBigDecimalInterest(BigDecimal interestIn) {
-        return interestIn.divide(BigDecimal.valueOf(100), 12, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(12), 12, RoundingMode.HALF_UP);
+    private BigDecimal getBigDecimalInterest(BigDecimal interest) {
+        return interest.divide(BigDecimal.valueOf(100), 12, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(12), 12, RoundingMode.HALF_UP);
     }
 }
