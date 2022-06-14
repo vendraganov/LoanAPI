@@ -19,9 +19,9 @@ public class SuccessfulResponse<T> extends ResponseEntity<T> {
         return getMapSuccessfulResponse(status, objectMap);
     }
 
-    public static <T> SuccessfulResponse<Object> getResponse(HttpStatus status, String responseName, T responseObj) {
+    public static <T> SuccessfulResponse<Object> getResponse(HttpStatus status, String returnType, T responseObj) {
         Map<String, Object> objectMap = new LinkedHashMap<>();
-        objectMap.put(responseName, responseObj);
+        objectMap.put(returnType, responseObj);
         return getMapSuccessfulResponse(status, objectMap);
     }
 

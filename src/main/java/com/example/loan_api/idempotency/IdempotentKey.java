@@ -30,6 +30,10 @@ public class IdempotentKey {
     private String domain;
 
     @NotNull
+    @Column(name = RETURN_TYPE)
+    private String returnType;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = Constants.STATUS)
     private IdempotentKeyStatus status;
