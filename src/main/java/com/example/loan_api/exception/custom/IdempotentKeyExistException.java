@@ -7,16 +7,16 @@ import org.springframework.http.HttpStatus;
 public class IdempotentKeyExistException extends RuntimeException {
 
     private final HttpStatus status;
-    private String returnType;
+    private String methodName;
 
     public IdempotentKeyExistException(String message, HttpStatus status) {
         super(message);
         this.status = status;
     }
 
-    public IdempotentKeyExistException(String message, String returnType, HttpStatus status) {
+    public IdempotentKeyExistException(String message, String methodName, HttpStatus status) {
         super(message);
-        this.returnType = returnType;
+        this.methodName = methodName;
         this.status = status;
     }
 }

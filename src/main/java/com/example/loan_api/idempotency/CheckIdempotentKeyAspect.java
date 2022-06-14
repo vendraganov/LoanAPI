@@ -26,6 +26,8 @@ public class CheckIdempotentKeyAspect {
         Object[] args = joinPoint.getArgs();
         UUID idempotentKeyId = null;
         String uri = null;
+        String methodName = joinPoint.getSignature().getName();
+
         for (Object obj : args) {
             if (obj instanceof HttpServletRequest) {
                 uri = ((HttpServletRequest) obj).getRequestURI();
@@ -36,6 +38,7 @@ public class CheckIdempotentKeyAspect {
                 }
             }
         }
+
         if (idempotentKeyId != null) {
             Optional<IdempotentKey> idempotentKeyOptional = idempotentKeyRepository.findById(idempotentKeyId);
             if (idempotentKeyOptional.isPresent()) {
@@ -43,35 +46,37 @@ public class CheckIdempotentKeyAspect {
 
                 if (idempotentKey.getStatus().equals(IdempotentKeyStatus.USED)) {
                     if (idempotentKey.getDomain().equals(uri)) {
-                        throw new IdempotentKeyExistException("Request completed!", idempotentKey.getReturnType(), HttpStatus.OK);
+                        throw new IdempotentKeyExistException("Request completed!", idempotentKey.getMethodName(), HttpStatus.OK);
                     }
                     throw new IdempotentKeyExistException("Idempotent key exist!", HttpStatus.CONFLICT);
                 } else if (idempotentKey.getStatus().equals(IdempotentKeyStatus.IN_USE)) {
                     if (!idempotentKey.getDomain().equals(uri)) {
-                        updateIdempotentKey(idempotentKey, uri);
+                        updateIdempotentKey(idempotentKey, uri, methodName);
                     }
                     return joinPoint.proceed();
                 }
             }
-            saveIdempotentKey(idempotentKeyId, uri);
+            saveIdempotentKey(idempotentKeyId, uri, methodName);
             return joinPoint.proceed();
         } else {
             throw new IllegalArgumentException("Idempotent key not presented in header!");
         }
     }
 
-    private void saveIdempotentKey(UUID idempotentKeyIn, String uri) {
+    private void saveIdempotentKey(UUID idempotentKeyIn, String uri, String methodName) {
         idempotentKeyRepository.save(IdempotentKey
                 .builder()
                 .idempotentKey(idempotentKeyIn)
                 .domain(uri)
+                .methodName(methodName)
                 .status(IdempotentKeyStatus.IN_USE)
                 .usedOn(LocalDateTime.now())
                 .build());
     }
 
-    private void updateIdempotentKey(IdempotentKey idempotentKey, String uri) {
+    private void updateIdempotentKey(IdempotentKey idempotentKey, String uri, String methodName) {
         idempotentKey.setDomain(uri);
+        idempotentKey.setMethodName(methodName);
         idempotentKey.setStatus(IdempotentKeyStatus.IN_USE);
         idempotentKey.setUsedOn(LocalDateTime.now());
         idempotentKeyRepository.save(idempotentKey);

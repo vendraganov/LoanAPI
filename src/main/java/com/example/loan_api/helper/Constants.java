@@ -40,7 +40,7 @@ public class Constants {
     public static final String LOAN_TYPES = "loan_types";
     public static final String LOAN_SCHEDULE = "loan_schedule";
     public static final String MONTHLY_PAYMENT_AMOUNT = "monthly_payment_amount";
-    public static final String RETURN_TYPE = "return_type";
+    public static final String METHOD_NAME = "method_name";
 
     public static final String DATA = "data";
     public static final String ERROR = "error";

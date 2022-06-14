@@ -32,6 +32,8 @@ import java.util.stream.Stream;
 @Service
 public class LoanService {
 
+    private static final String LOAN_NOT_FOUND = "Loan not found with id: ";
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
     private final LoanRepository loanRepository;
@@ -137,12 +139,12 @@ public class LoanService {
 
     private Loan getLoan(UUID loanId) {
         return loanRepository.findById(loanId)
-                .orElseThrow(() -> new IllegalArgumentException("Loan not found with id: " + loanId));
+                .orElseThrow(() -> new IllegalArgumentException(LOAN_NOT_FOUND + loanId));
     }
 
     private Loan getLoan(UUID loanId, UUID userId) {
         return loanRepository.findByIdAndUserId(loanId, userId)
-                .orElseThrow(() -> new IllegalArgumentException("Loan not for user with id: " + userId));
+                .orElseThrow(() -> new IllegalArgumentException(LOAN_NOT_FOUND + userId));
     }
 
     private boolean isUserAppliedForThisLoanType(User user, LoanType loanType) {

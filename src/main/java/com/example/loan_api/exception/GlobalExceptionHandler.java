@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import static com.example.loan_api.helper.Constants.MESSAGE;
+
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -26,11 +28,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String ERROR = "error";
     private static final String WARNING = "warning";
 
+    /**
+     * We can get the Method called idempotentKey.getMethodName()
+     * and look for the last record inserted and returned when HttpStatus.OK
+    */
     @ExceptionHandler(IdempotentKeyExistException.class)
     public final ResponseEntity<Object> handleIdempotentKeyExistException(IdempotentKeyExistException e) {
         logError(e, WARNING);
         if (e.getStatus().equals(HttpStatus.OK)) {
-            return SuccessfulResponse.getResponse(HttpStatus.OK, e.getReturnType(), e.getMessage());
+            return SuccessfulResponse.getResponse(HttpStatus.OK, MESSAGE, e.getMessage());
         }
         return ErrorResponse.getResponse(HttpStatus.CONFLICT, e.getMessage());
     }

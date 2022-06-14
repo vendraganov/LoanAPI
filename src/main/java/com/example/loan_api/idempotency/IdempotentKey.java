@@ -30,8 +30,8 @@ public class IdempotentKey {
     private String domain;
 
     @NotNull
-    @Column(name = RETURN_TYPE)
-    private String returnType;
+    @Column(name = METHOD_NAME)
+    private String methodName;
 
     @NotNull
     @Enumerated(EnumType.STRING)
